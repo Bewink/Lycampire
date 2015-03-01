@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+
+    <title>Lycampire{% block title %}{% endblock %}</title>
+
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+    {% block stylesheets %}{% endblock %}
+    {% block scripts %}{% endblock %}
+
+    {% for path in styles %}
+    <link rel="stylesheet" type="text/css" href="{{ path }}" />
+    {% endfor %}
+
+    {% for path in scripts %}
+    <script type="text/javascript" src="{{ path }}"></script>
+    {% endfor %}
+
+    <!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+</head>
+<body>
+    <header>
+        <h1>
+            Bewrite
+        </h1>
+    </header>
+
+    <div class="pop">
+        {% for error in errors %}
+            <p class="alert alert-error">
+                {{ error }}
+            </p>
+        {% endfor %}
+
+        {% for warning in warnings %}
+            <p class="alert alert-warning">
+                {{ warning }}
+            </p>
+        {% endfor %}
+
+        {% for info in infos %}
+            <p class="alert alert-info">
+                {{ info }}
+            </p>
+        {% endfor %}
+    </div>
+
+    {% block content %}{% endblock %}
+
+    {% for path in footScripts %}
+        <script type="text/javascript" src="{{ path }}"></script>
+    {% endfor %}
+</body>
+</html>

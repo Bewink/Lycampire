@@ -1,0 +1,104 @@
+<?php
+
+namespace vendor\befew;
+
+/**
+ * Class Request
+ * @package vendor\befew
+ */
+class Request extends Utils {
+    private $url;
+    private $get;
+    private $post;
+
+    /**
+     * Constructor
+     *
+     * @param Path $url
+     */
+    public function __construct(Path $url) {
+        $this->url = $url;
+        $this->get = self::getGet();
+        $this->post = self::getPost();
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString() {
+        return $this->url->getPath();
+    }
+
+    /**
+     * @return Path
+     */
+    public function getUrl() {
+        return $this->url;
+    }
+
+    /**
+     * @param null $id
+     * @param null $default
+     * @param bool $secure
+     * @return null|string
+     */
+    public static function getPost($id = null, $default = null, $secure = false) {
+        return ($id == null) ? self::getVar($_POST, $default, $secure) : self::getVar($_POST[$id], $default, $secure);
+    }
+
+    /**
+     * @param null $id
+     * @param null $default
+     * @param bool $secure
+     * @return null|string
+     */
+    public static function getGet($id = null, $default = null, $secure = false) {
+        return ($id == null) ? self::getVar($_GET, $default, $secure) : self::getVar($_GET[$id], $default, $secure);
+    }
+
+    /**
+     * @param $id
+     * @param null $default
+     * @param bool $secure
+     * @param string $type
+     * @return null|string
+     */
+    public function get($id, $default = null, $secure = false, $type = "all") {
+        switch(strtolower($type)) {
+            case 'get':
+                return $this->getGet($id, $default, $secure);
+                break;
+
+            case 'post':
+                return $this->getPost($id, $default, $secure);
+                break;
+
+            default:
+                return ($this->getGet($id) == null) ? $this->getPost($id, $default, $secure) : $this->getGet($id, $default, $secure);
+                break;
+        }
+    }
+
+    public function createSession() {
+        $_SESSION['loggedIn'] = true;
+    }
+
+    public function destroySession() {
+        unset($_SESSION['loggedIn']);
+        session_destroy();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPostData() {
+        return ($_SERVER['REQUEST_METHOD'] == "POST");
+    }
+
+    /**
+     * @return bool
+     */
+    public function isLoggedInUser() {
+        return (isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] === true);
+    }
+}

@@ -1,0 +1,3 @@
+index:
+  file: 'Home/HomeController.php'
+  action: 'index'

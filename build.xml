@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="." name="Lycampire" default="deploy-local">
+    <target name="deploy-local" depends="compass-compile">
+        <copy todir="${basedir}/out" overwrite="true">
+            <fileset dir="${basedir}/src">
+                <include name="**/*"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="compass-compile">
+        <exec dir="${basedir}/src/src/Home/View" executable="cmd">
+            <arg value="/C compass compile" />
+        </exec>
+    </target>
+</project>
